@@ -13,9 +13,9 @@ Q_LOGGING_CATEGORY(DBG_IOCFLASH_UPDATE_THREAD,"IOCFlash.UpdateThread", QtInfoMsg
 
 IoControllerUpdateThread::IoControllerUpdateThread()
     : m_RetryCounter(0)
-    , m_iocGPIOmcuBoot0{"mcu-boot0", false}
-    , m_iocGPIOmcuBoot1{"mcu-boot1", false}
-    , m_iocGPIOmcuReset{"mcu-rst", true}
+    , m_iocGPIOmcuBoot0{"mcu_boot0", false}
+    , m_iocGPIOmcuBoot1{"mcu_boot1", false}
+    , m_iocGPIOmcuReset{"mcu_rst", true}
 {
     m_FlashData_idx = 0;
 
