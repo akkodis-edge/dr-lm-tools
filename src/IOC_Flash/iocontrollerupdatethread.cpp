@@ -15,7 +15,7 @@ IoControllerUpdateThread::IoControllerUpdateThread()
     : m_RetryCounter(0)
     , m_iocGPIOmcuBoot0{"mcu_boot0", false}
     , m_iocGPIOmcuBoot1{"mcu_boot1", false}
-    , m_iocGPIOmcuReset{"mcu_rst", true}
+    , m_iocGPIOmcuReset{"mcu_reset", true}
 {
     m_FlashData_idx = 0;
 
