@@ -1,5 +1,5 @@
 TEMPLATE = app
-CONFIG += debug_and_release console
+CONFIG += console
 TARGET = ioctest
 
 
@@ -7,24 +7,16 @@ QT += core
 QT -= gui
 
 include ( ../../prod.pri )
-# install paths
-target1.files = ioctestsdfds
-target1.path = $$VS_BIN_PATH
-INSTALLS += target1
-
-extra.path = $$VS_CONF_PATH
-INSTALLS += extra
+INCLUDEPATH += ../../include
 
 INCLUDEPATH += ../common
 LIBS += -L../common -lcommon
 
-# qextserialport Library
-QEXTSERIALPORT_BUILDDIR = ../../libs/qextserialport
-include( ../../libs/qextserialport/qextserialport.pri )
+INCLUDEPATH += ../../libs/qextserialport/src
+LIBS += -L../../libs/qextserialport/src/build -lqextserialport
 
-# libVSCommon Library
-LIBVSCOMMON_BUILDDIR = ../../libs/libVSCommon
-include( ../../libs/libVSCommon/libVSCommon.pri )
+INCLUDEPATH += ../../libs/libVSCommon
+LIBS += -L../../libs/libVSCommon -lVSCommon
 
 
 # Input

@@ -2,6 +2,7 @@
 
 include ( ../../prod.pri )
 TEMPLATE = lib
+CONFIG += staticlib
 
 TARGET = VSCommon
 QT += \
@@ -11,7 +12,7 @@ QT += \
 
 QT -= gui
 
-DEFINES += VSCOMMON_SHAREDLIB_LIBRARY
+DEFINES += VSCOMMON_LIBRARY
 INCLUDEPATH += ../../include
 HEADERS += \
     Communication/CrcCCITT.h \
@@ -21,8 +22,3 @@ SOURCES += \
     Communication/CrcCCITT.cpp
 
 OTHER_FILES =
-
-
-# Set install pats
-target.path = $$VS_LIB_PATH
-INSTALLS += target

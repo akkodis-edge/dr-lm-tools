@@ -19,17 +19,14 @@ QT -= gui
 
 INCLUDEPATH += ../include
 
-# qextserialport Library
-QEXTSERIALPORT_BUILDDIR = ../libs/qextserialport
-include( ../libs/qextserialport/qextserialport.pri )
+INCLUDEPATH += ../libs/qextserialport/src
+LIBS += -L../libs/qextserialport/src/build -lqextserialport
 
-# libVSCommon Library
-LIBVSCOMMON_BUILDDIR = ../libs/libVSCommon
-include( ../libs/libVSCommon/libVSCommon.pri )
+INCLUDEPATH += ../libs/libVSCommon
+LIBS += -L../libs/libVSCommon -lVSCommon
 
-# libIOCGpio Library
-LIBIOCGPIO_BUILDDIR = ../libs/libIOCGpio
-include( ../libs/libIOCGpio/libIOCGpio.pri )
+INCLUDEPATH += ../libs/libIOCGpio
+LIBS += -L../libs/libIOCGpio -lIOCGpio -lgpiodcxx
 
 # Set inst# Set install pats
 target.path = $$VS_BIN_PATH

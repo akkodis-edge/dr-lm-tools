@@ -13,20 +13,19 @@ INSTALLS += target
 extra.path = $$VS_CONF_PATH
 INSTALLS += extra
 
+INCLUDEPATH += ../../include
+
 INCLUDEPATH += ../common
 LIBS += -L../common -lcommon
 
-# qextserialport Library
-QEXTSERIALPORT_BUILDDIR = ../../libs/qextserialport
-include( ../../libs/qextserialport/qextserialport.pri )
+INCLUDEPATH += ../../libs/qextserialport/src
+LIBS += -L../../libs/qextserialport/src/build -lqextserialport
 
-# libVSHAL Library for Base Unit
-LIBVSHAL_BUILDDIR = ../../libs/libVSHAL
-LIBVSHAL_BU = 1
-include( ../../libs/libVSHAL/libVSHAL.pri )
-# libVSCommon Library
-LIBVSCOMMON_BUILDDIR = ../../libs/libVSCommon
-include( ../../libs/libVSCommon/libVSCommon.pri )
+INCLUDEPATH += ../../libs/libVSCommon
+LIBS += -L../../libs/libVSCommon -lVSCommon
+
+INCLUDEPATH += ../../libs/libVSHAL
+LIBS += -L../../libs/libVSHAL -lVSHAL
 
 # Input
 HEADERS += \

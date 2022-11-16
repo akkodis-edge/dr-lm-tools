@@ -6,7 +6,7 @@ DESTDIR                 = build
 CONFIG                 += qt warn_on
 CONFIG                  += dll
 DEFINES                 += QEXTSERIALPORT_LIB
-#CONFIG                 += staticlib
+CONFIG                 += staticlib
 include ( ../../../prod.pri )
 # event driven device enumeration on windows requires the gui module
 !win32:QT               -= gui
@@ -47,5 +47,5 @@ CONFIG(debug, debug|release) {
 
 
 # Set install pats
-target.path = $$VS_LIB_PATH
-INSTALLS += target
+#target.path = $$VS_LIB_PATH
+#INSTALLS += target

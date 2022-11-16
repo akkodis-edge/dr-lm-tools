@@ -9,11 +9,12 @@ INCLUDEPATH += .
 #include ( ../../../mkspecs/vitalsim2.pri )
 include ( ../../prod.pri )
 # qextserialport Library
+INCLUDEPATH += ../../libs/qextserialport/src
 include( ../../libs/qextserialport/qextserialport.pri )
 
 # libVSHAL Library for Base Unit
-LIBVSHAL_BU = 1
-include( ../../libs/libVSHAL/libVSHAL.pri )
+#LIBVSHAL_BU = 1
+#include( ../../libs/libVSHAL/libVSHAL.pri )
 
 # libVSCommon Library
 include( ../../libs/libVSCommon/libVSCommon.pri )

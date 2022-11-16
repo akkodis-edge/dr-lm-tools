@@ -1,5 +1,6 @@
 include ( ../../prod.pri )
 TEMPLATE = lib
+CONFIG += staticlib
 
 TARGET = IOCGpio
 QT += \
@@ -7,7 +8,7 @@ QT += \
 
 QT -= gui
 
-DEFINES += IOCGPIO_SHAREDLIB_LIBRARY
+DEFINES += IOCGPIO_LIBRARY
 INCLUDEPATH += ../../include
 HEADERS += \
     gpio.h
@@ -18,8 +19,3 @@ SOURCES += \
     gpio.cpp
 
 OTHER_FILES =
-
-
-# Set install pats
-target.path = $$VS_LIB_PATH
-INSTALLS += target

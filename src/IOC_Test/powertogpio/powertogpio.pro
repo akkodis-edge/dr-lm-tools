@@ -7,6 +7,7 @@ TARGET = powertogpio
 DEPENDPATH += .
 INCLUDEPATH += .
 
+QT += core 
 QT -= gui
 
 # VitalSim2
@@ -22,9 +23,8 @@ INSTALLS += extra
 INCLUDEPATH += ../common
 LIBS += -L../common -lcommon
 
-# qextserialport Library
-QEXTSERIALPORT_BUILDDIR = ../../../libs/qextserialport
-include( ../../../libs/qextserialport/qextserialport.pri )
+INCLUDEPATH += ../../libs/qextserialport/src
+LIBS += -L../../libs/qextserialport/src/build -lqextserialport
 
 # Input
 HEADERS += \

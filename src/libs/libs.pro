@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS += libVSCommon qextserialport libIOCGpio
+SUBDIRS += libVSCommon libVSHAL qextserialport libIOCGpio

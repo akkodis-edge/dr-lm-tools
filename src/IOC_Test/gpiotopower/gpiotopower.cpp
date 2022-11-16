@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <fcntl.h>
+#include <unistd.h>
 #include "inputeventhandler.h"
 
 GpioToPower::GpioToPower(int &argc, char *argv[])
