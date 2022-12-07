@@ -14,9 +14,10 @@
 #include "testanalog.h"
 #include "testcuff.h"
 #include "testgpio.h"
-#include "testgpo.h"
+#include "testgpoecg.h"
 #include "testpso.h"
 #include "testpulsedriver.h"
+#include "testcancpr.h"
 
 // Guard against accidentally triggering power
 #include "safeguardpower.h"
@@ -213,12 +214,14 @@ int main(int argc, char *argv[])
         tests->addTest(new TestGPIO(&ioControl, 0, 1)); // set gpio0, read gpio1
         tests->addTest(new TestGPIO(&ioControl, 1, 0)); // set gpio1, read gpio0
 
-        // GPO (and analog_in6)
-        tests->addTest(new TestGPO(&ioControl, 1)); // send on gpo1
-        tests->addTest(new TestGPO(&ioControl, 2)); // send on gpo2
+        // GPO-ECG (and analog_in6)
+        tests->addTest(new TestGPOECG(&ioControl)); // gpo1, gpo2, ecg
 
         // Cuff sphygmamometer
         tests->addTest(new TestCuff(&ioControl, 40)); // above 40mmHg
+
+        // CAN-CPR test
+        tests->addTest(new TestCanCpr());
 
         // Run all tests. Controlled by own QThead, to ensure that the
         // Qt message pump is running.

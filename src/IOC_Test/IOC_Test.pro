@@ -7,12 +7,14 @@ SUBDIRS = \
     pso \
     pulsedriver \
 	gpiotopower \
-#	productiontest \
+	productiontest \
+	linkboxtest \
 	cufftest 
 
 ioctest.depends = common
 pso.depends = common
 pulsedriver.depends = common
 gpiotopower.depends = common
-#productiontest.depends = common
+productiontest.depends = common
+linkboxtest.depends = common
 cufftest.depends = common

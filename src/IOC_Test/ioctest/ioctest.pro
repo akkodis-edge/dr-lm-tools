@@ -18,7 +18,6 @@ LIBS += -L../../libs/qextserialport/src/build -lqextserialport
 INCLUDEPATH += ../../libs/libVSCommon
 LIBS += -L../../libs/libVSCommon -lVSCommon
 
-
 # Input
 HEADERS += \
 	pollanalog.h \
@@ -26,9 +25,10 @@ HEADERS += \
 	pollpso.h \
 	safeguardpower.h \
 	testanalog.h \
+	testcancpr.h \
 	testcuff.h \
 	testgpio.h \
-	testgpo.h \
+	testgpoecg.h \
 	testpower.h \
 	testpso.h \
 	testpulsedriver.h \
@@ -42,9 +42,10 @@ SOURCES += \
 	pollpso.cpp \
 	safeguardpower.cpp \
 	testanalog.cpp \
+	testcancpr.cpp \
 	testcuff.cpp \
 	testgpio.cpp \
-	testgpo.cpp \
+	testgpoecg.cpp \
 	testpower.cpp \
 	testpso.cpp \
 	testpulsedriver.cpp \

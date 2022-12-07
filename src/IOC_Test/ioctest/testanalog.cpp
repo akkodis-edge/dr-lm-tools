@@ -29,7 +29,7 @@ quint16 TestAnalog::actualChannel(quint16 ch)
     case 2: return 12;
     case 3: return 4;
     case 4: return 15;
-    case 5: return 8;
+    case 5: return 10;
     case 6: return 9;
     default:
         return 0;

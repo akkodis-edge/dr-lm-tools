@@ -1,7 +1,7 @@
 TEMPLATE = lib
 CONFIG += staticlib
 
-QT += core
+QT += core testlib
 QT -= gui
 
 DEPENDPATH += .
@@ -24,6 +24,7 @@ HEADERS = \
 	SWversion.h \
 	inputeventhandler.h \
 	ioctrlcommController.h \
+	synchronousiocontroller.h \
 	itestcase.h \
 	itestreporter.h \
 	testmodewrapper.h
@@ -31,4 +32,5 @@ HEADERS = \
 SOURCES = \
 	inputeventhandler.cpp \
 	ioctrlcommController.cpp \
+	synchronousiocontroller.cpp \
 	testmodewrapper.cpp

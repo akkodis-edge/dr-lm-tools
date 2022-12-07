@@ -236,7 +236,7 @@ DIST          = /opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mks
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/qt_config.prf \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/linux-oe-g++/qmake.conf \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/spec_post.prf \
-		../../../.qmake.stash \
+		../../../../.qmake.stash \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/exclusive_builds.prf \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/toolchain.prf \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/default_pre.prf \
@@ -454,7 +454,7 @@ Makefile: src-omap.pro /opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/qt_config.prf \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/linux-oe-g++/qmake.conf \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/spec_post.prf \
-		../../../.qmake.stash \
+		../../../../.qmake.stash \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/exclusive_builds.prf \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/toolchain.prf \
 		/opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/default_pre.prf \
@@ -627,7 +627,7 @@ Makefile: src-omap.pro /opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/
 /opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/qt_config.prf:
 /opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/linux-oe-g++/qmake.conf:
 /opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/spec_post.prf:
-../../../.qmake.stash:
+../../../../.qmake.stash:
 /opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/exclusive_builds.prf:
 /opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/toolchain.prf:
 /opt/poky/4.0.4/sysroots/cortexa53-crypto-poky-linux/usr/lib/mkspecs/features/default_pre.prf:

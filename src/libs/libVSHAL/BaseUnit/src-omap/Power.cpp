@@ -6,9 +6,9 @@ using namespace LM_VSHAL;
 
 Power::Power(std::string a_Path)
 : m_GPIO(a_Path), m_PreviousPowerButtonValue(false)
-, m_iocGPIO_5VManikinEn ()
-, m_iocGPIO_Boost12VEn
-, m_iocGPIO_vocalAmpEn
+//, m_iocGPIO_5VManikinEn ()
+//, m_iocGPIO_Boost12VEn
+//, m_iocGPIO_vocalAmpEn
 {
     m_FileHandle = NULL;
 }
@@ -19,7 +19,7 @@ Power::~Power()
     closePowerButtonDevice();
 }
 
-void Power::setVocalAmpEnable(bool a_Enable)
+/*void Power::setVocalAmpEnable(bool a_Enable)
 {
     m_GPIO.setGPIO(Types::GPIO_VOCAL_AMP_EN, a_Enable);
 }
@@ -27,11 +27,15 @@ void Power::setVocalAmpEnable(bool a_Enable)
 bool Power::getVocalAmpPower()
 {
     return m_GPIO.getGPIO(Types::GPIO_VOCAL_AMP_EN);
-}
+}*/
 
 void Power::setManikinPower(bool a_Enable)
 {
-    m_GPIO.setGPIO(Types::GPIO_5V_MANIKIN_EN, a_Enable);
+    //m_GPIO.setGPIO(Types::GPIO_5V_MANIKIN_EN, a_Enable);
+    if ( a_Enable )    
+        system("echo 1 >/sys/class/power_supply/MANIKIN_5V/online");
+    else
+        system("echo 0 >/sys/class/power_supply/MANIKIN_5V/online");
 }
 
 
@@ -90,7 +94,11 @@ bool Power::getPowerButton()
 
 void Power::setBoost12V(bool a_Enable)
 {
-    m_GPIO.setGPIO(Types::GPIO_BOOST_12V_EN, a_Enable);
+    //m_GPIO.setGPIO(Types::GPIO_BOOST_12V_EN, a_Enable);
+    if(a_Enable)
+        system("echo 1 >/sys/class/power_supply/MANIKIN_5V/online");
+    else
+        system("echo 0 >/sys/class/power_supply/MANIKIN_5V/online");
 }
 
 bool Power::getBoost12V()
