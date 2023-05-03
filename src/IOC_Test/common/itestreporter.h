@@ -10,6 +10,8 @@ public:
 
     virtual void setCurrentTestName(QString name) = 0;
     virtual void testHasFailed(QString why) = 0;
+    virtual void logResult(QString value) = 0;
+    virtual void setLogTestHeader(QString header) = 0;
     virtual void testHasRun() = 0;
 
     virtual bool allTestsPassed() = 0;

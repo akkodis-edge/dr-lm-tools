@@ -28,7 +28,7 @@ HEADERS += \
 	testcancpr.h \
 	testcuff.h \
 	testgpio.h \
-	testgpoecg.h \
+	testgpo.h \
 	testpower.h \
 	testpso.h \
 	testpulsedriver.h \
@@ -45,7 +45,7 @@ SOURCES += \
 	testcancpr.cpp \
 	testcuff.cpp \
 	testgpio.cpp \
-	testgpoecg.cpp \
+	testgpo.cpp \
 	testpower.cpp \
 	testpso.cpp \
 	testpulsedriver.cpp \

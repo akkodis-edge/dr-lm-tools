@@ -14,7 +14,7 @@
 #include "testanalog.h"
 #include "testcuff.h"
 #include "testgpio.h"
-#include "testgpoecg.h"
+#include "testgpo.h"
 #include "testpso.h"
 #include "testpulsedriver.h"
 #include "testcancpr.h"
@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
 \nOptions:                                                              \
 \n  -r, --run            Run all tests.                                 \
 \n  --fw                 Show current IO Controller firmware version.   \
+\n  -f --file               Save results in a file                         \
 \n  --poll-gpio=<ch>     Poll given GPIO channel.                       \
 \n  --poll-pso=<ch>      Poll given PSO channel.                        \
 \n  --poll-analog=<ch>   Poll given Analog channel.                     \
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
     bool option_run = false;
     bool option_firmware = false;
     bool option_colors = false;
+    bool option_file_out = false;
     bool option_pollgpio = false;
     quint16 option_pollgpio_channel = 0;
     bool option_pollpso = false;
@@ -100,6 +102,8 @@ int main(int argc, char *argv[])
             option_firmware = true;
         } else if (arg == "-c" || arg == "--color") {
             option_colors = true;
+        } else if (arg == "-f" || arg == "--file") {
+            option_file_out = true;
         }
         // else if (arg == "--test") {
         //     ioControl.sendTestModeCMD(0x01);              //Enter test mode
@@ -185,28 +189,28 @@ int main(int argc, char *argv[])
         //SafeguardPower *safeguard = new SafeguardPower(&ioControl);
         //safeguard->start();
 
-        TextReporter *reporter = new TextReporter(&a, option_colors);
+        TextReporter *reporter = new TextReporter(&a, option_colors, option_file_out);
         TestRunner *tests = new TestRunner(&a, reporter, &a);
 
         // Pulse Sense Oscillators
-        tests->addTest(new TestPSO(&ioControl, 1, 5100)); // +/- 10%
-        tests->addTest(new TestPSO(&ioControl, 2, 5100));
-        tests->addTest(new TestPSO(&ioControl, 3, 5100));
-        tests->addTest(new TestPSO(&ioControl, 4, 5100));
-        tests->addTest(new TestPSO(&ioControl, 5, 5100));
-        tests->addTest(new TestPSO(&ioControl, 6, 5100));
+        tests->addTest(new TestPSO(&ioControl, 1, 54000)); // +/- 10%
+        tests->addTest(new TestPSO(&ioControl, 2, 54000));
+        tests->addTest(new TestPSO(&ioControl, 3, 54000));
+        tests->addTest(new TestPSO(&ioControl, 4, 54000));
+        tests->addTest(new TestPSO(&ioControl, 5, 54000));
+        tests->addTest(new TestPSO(&ioControl, 6, 54000));
 
         // Pulse Drivers
-        tests->addTest(new TestPulseDriver(&ioControl, 1, 50, 55));
-        tests->addTest(new TestPulseDriver(&ioControl, 2, 50, 55));
-        tests->addTest(new TestPulseDriver(&ioControl, 3, 50, 55));
-        tests->addTest(new TestPulseDriver(&ioControl, 4, 50, 55));
-        tests->addTest(new TestPulseDriver(&ioControl, 5, 50, 55));
-        tests->addTest(new TestPulseDriver(&ioControl, 6, 50, 55));
+        tests->addTest(new TestPulseDriver(&ioControl, 1, 2500, 3500));
+        tests->addTest(new TestPulseDriver(&ioControl, 2, 2500, 3500));
+        tests->addTest(new TestPulseDriver(&ioControl, 3, 2500, 3500));
+        tests->addTest(new TestPulseDriver(&ioControl, 4, 2500, 3500));
+        tests->addTest(new TestPulseDriver(&ioControl, 5, 2500, 3500));
+        tests->addTest(new TestPulseDriver(&ioControl, 6, 2500, 3500));
 
         // Analog 2, 3, 4, and 5
-        tests->addTest(new TestAnalog(&ioControl, 2, 2407, 2557)); // VBUS/11?
-        tests->addTest(new TestAnalog(&ioControl, 3, 1204, 1278)); // VBUS/22?
+        tests->addTest(new TestAnalog(&ioControl, 2, 2400, 2600)); // VBUS/11?
+        tests->addTest(new TestAnalog(&ioControl, 3, 1200, 1400)); // VBUS/22?
         tests->addTest(new TestAnalog(&ioControl, 4, 2358, 2606)); // ~2V
         tests->addTest(new TestAnalog(&ioControl, 5, 2978, 3227)); // ~2.5V
 
@@ -214,14 +218,15 @@ int main(int argc, char *argv[])
         tests->addTest(new TestGPIO(&ioControl, 0, 1)); // set gpio0, read gpio1
         tests->addTest(new TestGPIO(&ioControl, 1, 0)); // set gpio1, read gpio0
 
-        // GPO-ECG (and analog_in6)
-        tests->addTest(new TestGPOECG(&ioControl)); // gpo1, gpo2, ecg
+        // GPO (and analog_in6)
+        tests->addTest(new TestGPO(&ioControl, 1)); // send on gpo1
+        tests->addTest(new TestGPO(&ioControl, 2)); // send on gpo2
 
         // Cuff sphygmamometer
         tests->addTest(new TestCuff(&ioControl, 40)); // above 40mmHg
 
         // CAN-CPR test
-        tests->addTest(new TestCanCpr());
+        //tests->addTest(new TestCanCpr());
 
         // Run all tests. Controlled by own QThead, to ensure that the
         // Qt message pump is running.

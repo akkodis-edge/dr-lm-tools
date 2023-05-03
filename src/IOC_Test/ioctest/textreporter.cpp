@@ -1,10 +1,14 @@
 #include "textreporter.h"
 
+#include <iostream>
 #include <QDebug>
+#include <QFile>
 #include <QHashIterator>
+#include <QDateTime>
 
 TextReporter::TextReporter(QCoreApplication *app,
                            bool colorized,
+                           bool fileOutput,
                            QObject *parent)
     : QObject(parent)
     , m_currentTest()
@@ -12,6 +16,7 @@ TextReporter::TextReporter(QCoreApplication *app,
     , m_current(0)
     , m_tests()
     , m_colorized(colorized)
+    , m_fileOutput(fileOutput)
 {
 }
 
@@ -26,11 +31,14 @@ void TextReporter::setCurrentTestName(QString name)
     m_current->name = name;
     m_current->ok = true;
     m_current->why = QString();
+    m_current->csvResult = QString();
     // m_tests.append();
     // m_currentTest = name;
     // m_okTable[name] = true;     // assume good
     // m_errorTable[name] = "";
+    m_current->csvHeader = QString();
 }
+
 
 void TextReporter::testHasFailed(QString why)
 {
@@ -42,6 +50,16 @@ void TextReporter::testHasFailed(QString why)
            m_current->name.toUtf8().constData(),
            why.toUtf8().constData());
     // m_errorTable[m_currentTest] = why;
+}
+
+void TextReporter::setLogTestHeader(QString header)
+{
+    m_current->csvHeader = header;
+}
+
+void TextReporter::logResult(QString result)
+{
+    m_current->csvResult += result;
 }
 
 void TextReporter::testHasRun()
@@ -66,6 +84,30 @@ quint32 TextReporter::getFailedCount()
             count++;
     }
     return count;
+}
+
+QString TextReporter::systemCmdExec(const char* cmd) {
+    std::array<char, 128> buffer;
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+    size_t pos = std::string::npos;
+
+    if (!pipe) {
+        throw std::runtime_error("popen() failed!");
+    }
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        result += buffer.data();
+    }
+
+    // remove trailing new line
+    pos = result.find_last_of('\n');
+    
+    // If the newline character was found, erase it and everything after it
+    if (pos != std::string::npos) {
+        result.erase(pos);
+    }
+    
+    return QString(result.c_str());
 }
 
 void TextReporter::printTestResults(bool verbose)
@@ -126,4 +168,55 @@ void TextReporter::printTestResults(bool verbose)
                    red, "FAILED", normal);
         }
     }
+}
+
+void TextReporter::saveResultsToFile()
+{
+    if(!m_fileOutput)
+        return;
+    
+    // Get the current date and time
+    QDateTime dateTime = QDateTime::currentDateTime();
+    QString dateTimeString = dateTime.toString("yyyy-MM-dd_hh-mm-ss");
+
+    // Construct the file name with the serial number and current date and time
+    QString serialCmd = "nvram --get SYS_LM_PRODUCT_SERIAL";
+    QString serialNumber = systemCmdExec(serialCmd.toStdString().c_str());
+    QString fileLocation = "/home/root/";
+    QString fileName = fileLocation + "log_ioctest_" + serialNumber + ".csv";
+
+    QFile file(fileName);
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
+        std::cerr << "Error opening file!" << std::endl;
+        return;
+    }
+
+    QTextStream out(&file);
+
+    // Write the text to the file
+    out << dateTimeString << " " << serialNumber << "\n";
+
+    QList<TestData*>::const_iterator it;
+    for (it = m_tests.begin();
+         it != m_tests.end();
+         ++it)
+    {
+        out << (*it)->csvHeader;
+    }
+
+    out << "\n";
+
+    for (it = m_tests.begin();
+         it != m_tests.end();
+         ++it)
+    {
+        out << (*it)->csvResult;
+    }
+    out << "\n\n";
+
+    // Close the file
+    file.close();
+
+    std::cout << "Test output file:" << fileName.toStdString() << std::endl;
 }

@@ -53,12 +53,15 @@ void TestGPIO::receivedGpioMessage(quint16 channel, quint16 value)
 void TestGPIO::runTest(void)
 {
     // qDebug(">>> GPIO: write %u, read %u", m_writeChannel, m_readChannel);
+    m_reporter->setLogTestHeader(getName() + QString(" (%1-%2),").arg(m_writeChannel).arg(m_readChannel));
+
     bool connected = connect(
         m_controller, SIGNAL(gpioMessage(quint16, quint16)),
         this, SLOT(receivedGpioMessage(quint16, quint16)));
     if (not connected)
     {
         m_reporter->testHasFailed("Failed to connect callback.");
+        m_reporter->logResult("Error,");
         return;
     }
 
@@ -71,6 +74,7 @@ void TestGPIO::runTest(void)
     if (m_receivedValue != 0)
     {
         m_reporter->testHasFailed("Value from read channel not reset at start.");
+        m_reporter->logResult("Error,");
         return;
     }
 
@@ -78,9 +82,11 @@ void TestGPIO::runTest(void)
     m_controller->sendTestSetIOCMD(m_writeChannel, 1);
 
     READ_VALUE;
+    m_reporter->logResult(QString("%1,").arg(m_receivedValue));
     if (m_receivedValue != 1)
     {
-        m_reporter->testHasFailed("Value from read channel not set.");
+        m_reporter->testHasFailed(
+            QString("Value from read channel not set. Received value: %1").arg(m_receivedValue));
         return;
     }
 }

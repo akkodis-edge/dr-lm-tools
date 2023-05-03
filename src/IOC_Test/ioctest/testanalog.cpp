@@ -53,6 +53,8 @@ void TestAnalog::runTest(void)
         return;
     }
 
+    m_reporter->setLogTestHeader(getName() + QString(" (%1-%2),").arg(m_expectedLow).arg(m_expectedHigh));
+
     connect(m_controller, SIGNAL(adcMessage(quint16, quint16))
             , this, SLOT(receivedAdcMessage(quint16, quint16)));
 
@@ -65,9 +67,16 @@ void TestAnalog::runTest(void)
     if (not got_signal)
     {
         m_reporter->testHasFailed("Timed out.");
+        m_reporter->logResult("ERROR,");
         return;
     }
 
+    qDebug("Analog_in%u Value %u (%fV) Expected range (%u-%u)",
+        m_channel,  m_receivedValue, ((float)m_receivedValue * 3.3 / 4096),
+        m_expectedLow, m_expectedHigh);
+
+
+    m_reporter->logResult(QString("%1,").arg(m_receivedValue));
     if ((m_receivedValue < m_expectedLow)
         || (m_receivedValue > m_expectedHigh))
     {

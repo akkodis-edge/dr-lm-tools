@@ -50,6 +50,9 @@ bool TestPSO::closeEnough(quint32 input, quint32 target)
 
 void TestPSO::runTest()
 {
+    m_reporter->setLogTestHeader(getName() + QString(" (%1),").arg(m_expectedFreq));
+    qDebug("%s, %u\n", getName().toStdString().c_str(), m_expectedFreq);
+
     bool connected = connect(
         m_controller, SIGNAL(pulseMessage(quint16, quint32)),
         this, SLOT(receivedPulseMessage(quint16, quint32)));
@@ -57,19 +60,22 @@ void TestPSO::runTest()
     if (not connected)
     {
         m_reporter->testHasFailed("Failed to connect callback!");
+        m_reporter->logResult("Error,");
         return;
     }
 
     TestModeWrapper testMode(m_controller);   // raii
 
-    m_semaphore.release(m_semaphore.available());                       \
-    m_controller->sendTestGetPulsePalpFreqCMD(ioChannel(m_channel));    \
-    if (not m_semaphore.tryAcquire(1, 1000))                            \
-    {                                                                   \
-        m_reporter->testHasFailed("Reply from IO Controller timed out."); \
-        return;                                                         \
+    m_semaphore.release(m_semaphore.available());
+    m_controller->sendTestGetPulsePalpFreqCMD(ioChannel(m_channel));
+    if (not m_semaphore.tryAcquire(1, 1000))
+    {
+        m_reporter->testHasFailed("Reply from IO Controller timed out.");
+        m_reporter->logResult("Error,");
+        return;
     }
 
+    m_reporter->logResult(QString("%1,").arg(m_receivedFreq));
     if (not closeEnough(m_receivedFreq, m_expectedFreq))
     {
         m_reporter->testHasFailed(

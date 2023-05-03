@@ -1,18 +1,19 @@
-#ifndef TESTGPOECG_H
-#define TESTGPOECG_H
+#ifndef TESTGPO_H
+#define TESTGPO_H
 
 #include <QObject>
 #include <QSemaphore>
 #include "itestcase.h"
 #include "ioctrlcommController.h"
 
-class TestGPOECG
+class TestGPO
     : public QObject,
       public ITestCase
 {
     Q_OBJECT
 public:
-    explicit TestGPOECG(IOCtrlCommController * const controller,
+    explicit TestGPO(IOCtrlCommController * const controller,
+                     quint16 channel,
                      QObject *parent = 0
         );
 
@@ -29,6 +30,7 @@ private:
     IOCtrlCommController *m_controller;
     ITestReporter *m_reporter;
 
+    quint16 m_channel;
     quint16 m_expectedLow;
     quint16 m_expectedHigh;
 
@@ -36,4 +38,4 @@ private:
     quint16 m_receivedValue;
 };
 
-#endif /* TESTGPOECG_H */
+#endif /* TESTGPO_H */

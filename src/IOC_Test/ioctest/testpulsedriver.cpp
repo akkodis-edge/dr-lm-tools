@@ -57,12 +57,15 @@ void TestPulseDriver::setPwmValue(quint16 channel, quint16 value)
 
 void TestPulseDriver::runTest()
 {
+    m_reporter->setLogTestHeader(getName() + QString(" (%1-%2),").arg(m_expectedLow).arg(m_expectedHigh));
+
     bool didConnect = connect(
                 m_controller, SIGNAL(adcMessage(quint16, quint16)),
                 this, SLOT(receivedAdcMessage(quint16, quint16)));
 
     if (not didConnect) {
         m_reporter->testHasFailed("Couldn't connect");
+        
         return;
     }
 
@@ -78,10 +81,13 @@ void TestPulseDriver::runTest()
 
     if (not got_signal) {
         m_reporter->testHasFailed("Read analog value timed out.");
+        m_reporter->logResult("ERROR,");
         return;
     }
 
-    qDebug() << "Analog value with 0 input: %1" << m_receivedValue;
+    qDebug("Analog value with 0 input: \t\t%u (%fV) Expected range (%u-%u)",
+        m_receivedValue, ((float)m_receivedValue * 3.3 / 4096),
+        m_expectedLow, m_expectedHigh);
 
     // Set pulse driver to value different from 0 and measure
     setPwmValue(actualChannel(m_pdChannel), 0x1000);
@@ -92,11 +98,15 @@ void TestPulseDriver::runTest()
 
     if (not got_signal) {
         m_reporter->testHasFailed("Read analog value timed out.");
+        m_reporter->logResult("ERROR,");
         return;
     }
 
-    qDebug() << "Analog value with 0x1000 input: %1" << m_receivedValue;
+    qDebug("Analog value with 0x1000 input: \t%u (%fV) Expected range (%u-%u)",
+        m_receivedValue, ((float)m_receivedValue * 3.3 / 4096),
+        m_expectedLow, m_expectedHigh);
 
+    m_reporter->logResult(QString("%1,").arg(m_receivedValue));
     if (m_receivedValue >= m_expectedLow && m_receivedValue <= m_expectedHigh) {
         // ok!
     } else {

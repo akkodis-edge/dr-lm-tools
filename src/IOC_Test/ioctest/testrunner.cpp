@@ -42,6 +42,7 @@ void TestRunner::runTests()
         delete test;
     }
     m_reporter->printTestResults(true);
+    m_reporter->saveResultsToFile();
 }
 
 void TestRunner::run()
