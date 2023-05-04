@@ -6,9 +6,9 @@ SUBDIRS = \
 	ioctest \
     pso \
     pulsedriver \
-	gpiotopower \
-	productiontest \
-	linkboxtest \
+#	gpiotopower \
+#	productiontest \
+#	linkboxtest \
 	cufftest 
 
 ioctest.depends = common

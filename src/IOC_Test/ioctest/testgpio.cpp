@@ -31,7 +31,7 @@ quint16 TestGPIO::actualChannel(quint16 ch)
 void TestGPIO::receivedGpioMessage(quint16 channel, quint16 value)
 {
     // qDebug("%s - Ch:%u Val:%u", __func__, channel, value);
-    if (channel == channel)
+    if (channel == m_readChannel)
     {
         m_receivedValue = value;
         m_semaphore.release();

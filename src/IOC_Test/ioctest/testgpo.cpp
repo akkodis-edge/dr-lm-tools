@@ -51,7 +51,6 @@ bool TestGPO::closeEnough(quint16 input, quint16 target)
 
 void TestGPO::runTest()
 {
-    quint16 pre;
     quint16 post;
     quint16 target = 1550;
 

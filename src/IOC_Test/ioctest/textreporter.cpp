@@ -115,7 +115,7 @@ void TextReporter::printTestResults(bool verbose)
     const char * red    = m_colorized ? "\033[31;1m" : "";
     const char * green  = m_colorized ? "\033[32;1m" : "";
     const char * normal = m_colorized ? "\033[0m"    : "";
-    const char * bold   = m_colorized ? "\033[1m"    : "";
+    //const char * bold   = m_colorized ? "\033[1m"    : "";
 
     quint32 failedCount = getFailedCount();
 

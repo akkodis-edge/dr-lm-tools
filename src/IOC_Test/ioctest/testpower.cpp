@@ -137,8 +137,18 @@ void TestPower::runTest1()
 
     // 1
     m_powerEvent.release(m_powerEvent.available());
-    bool c = connect(&evhandler, SIGNAL(gotEvent(int)),
-                     this, SLOT(signalSemaphore(int)));
+
+    if (not connect(
+            &evhandler, SIGNAL(gotEvent(int)),
+                    this, SLOT(signalSemaphore(int)))
+        )
+    {
+        m_reporter->testHasFailed("Failed to connect.");
+        m_reporter->logResult("Error,");
+        return;
+    }
+
+
     m_controller->sendTestSetIOCMD(m_channel, 0x00); // event value = 1
     sleep(1);
     m_controller->sendTestSetIOCMD(m_channel, 0x01); // event value = 0
