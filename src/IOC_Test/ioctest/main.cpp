@@ -222,12 +222,12 @@ int main(int argc, char *argv[])
         tests->addTest(new TestGPO(&ioControl, 1)); // send on gpo1
         tests->addTest(new TestGPO(&ioControl, 2)); // send on gpo2
 
+        // CAN-CPR test
+        tests->addTest(new TestCanCpr());
+
         // Cuff sphygmamometer
         tests->addTest(new TestCuff(&ioControl, 40)); // above 40mmHg
-
-        // CAN-CPR test
-        //tests->addTest(new TestCanCpr());
-
+        
         // Run all tests. Controlled by own QThead, to ensure that the
         // Qt message pump is running.
         tests->start();

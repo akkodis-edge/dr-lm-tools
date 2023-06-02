@@ -3,7 +3,7 @@ CONFIG += console
 TARGET = ioctest
 
 
-QT += core
+QT += core testlib
 QT -= gui
 
 include ( ../../prod.pri )

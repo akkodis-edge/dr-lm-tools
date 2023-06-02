@@ -25,12 +25,15 @@ private slots:
 
 private:
     QextSerialPort *m_canSerialPort;
-    QextSerialPort *m_cprSerialPort;
+    QextSerialPort *m_cprUSBPort;
     ITestReporter *m_reporter;
-    QByteArray m_writeData;
-
+    QByteArray m_writeUARTData;
+    QByteArray m_writeUSBData;
+    bool receivedUSB;
+    bool receivedUART;
+    QByteArray m_readUARTData;
+    QByteArray m_readUSBData;
     QSemaphore m_semaphore;
-    quint16 m_receivedValue;
 };
 
 #endif // TESTCANCPR_H
