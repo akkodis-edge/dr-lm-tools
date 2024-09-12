@@ -1,6 +1,6 @@
 #include "testpulsedriver.h"
-
 #include "testmodewrapper.h"
+#include <QThread>  // Include for QThread::msleep
 
 TestPulseDriver::TestPulseDriver(IOCtrlCommController *controller,
                                  quint16 channel,
@@ -65,16 +65,18 @@ void TestPulseDriver::runTest()
 
     if (not didConnect) {
         m_reporter->testHasFailed("Couldn't connect");
-        
         return;
     }
 
-    TestModeWrapper testmode(m_controller); // raii
+    TestModeWrapper testmode(m_controller); // RAII
 
     // Set pulse driver value to 0 and measure
     setPwmValue(actualChannel(m_pdChannel), 0);
 
-    m_semaphore.release(m_semaphore.available()); // dangerous
+    // Introduce a delay
+    QThread::msleep(1000); //Sleep for 1 seconds
+
+    m_semaphore.release(m_semaphore.available()); // Dangerous
     m_controller->sendTestGetAdcCMD(m_adcChannel);
 
     bool got_signal = m_semaphore.tryAcquire(1, 1000); // ms
@@ -85,12 +87,15 @@ void TestPulseDriver::runTest()
         return;
     }
 
-    qDebug("Analog value with 0 input: \t\t%u (%fV) Expected range (%u-%u)",
-        m_receivedValue, ((float)m_receivedValue * 3.3 / 4096),
-        m_expectedLow, m_expectedHigh);
+    //qDebug("Analog value with 0 input: \t\t%u (%fV) Expected range (%u-%u)",
+    //m_receivedValue, ((float)m_receivedValue * 3.3 / 4096),
+    //m_expectedLow, m_expectedHigh);
 
     // Set pulse driver to value different from 0 and measure
     setPwmValue(actualChannel(m_pdChannel), 0x1000);
+
+    // Introduce a delay before reading ADC value again
+    QThread::msleep(1000); // Sleep for 1 second
 
     m_controller->sendTestGetAdcCMD(m_adcChannel);
 
@@ -102,9 +107,11 @@ void TestPulseDriver::runTest()
         return;
     }
 
-    qDebug("Analog value with 0x1000 input: \t%u (%fV) Expected range (%u-%u)",
-        m_receivedValue, ((float)m_receivedValue * 3.3 / 4096),
-        m_expectedLow, m_expectedHigh);
+   qDebug("%s value: %u || %.2fV (Expected range: %u-%u || %.2fV-%.2fV)",
+        getName().toStdString().c_str(), m_receivedValue, (((float)m_receivedValue * 3.3) / 4096),
+        m_expectedLow, m_expectedHigh, 
+        (((float)m_expectedLow * 3.3) / 4096),
+        (((float)m_expectedHigh * 3.3) / 4096));
 
     m_reporter->logResult(QString("%1,").arg(m_receivedValue));
     if (m_receivedValue >= m_expectedLow && m_receivedValue <= m_expectedHigh) {

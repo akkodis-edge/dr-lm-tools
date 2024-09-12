@@ -14,6 +14,8 @@ class TestGPO
 public:
     explicit TestGPO(IOCtrlCommController * const controller,
                      quint16 channel,
+		     quint16 expectedLow,
+		     quint16 expectedHigh,
                      QObject *parent = 0
         );
 
@@ -25,7 +27,7 @@ private slots:
     void receivedAdcMessage(quint16 channel, quint16 value);
 
 private:
-    bool closeEnough(quint16 input, quint16 target);
+    bool closeEnough(quint16 input);
 
     IOCtrlCommController *m_controller;
     ITestReporter *m_reporter;

@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 #include <QHash>
 #include "itestreporter.h"
+#include <memory>
 
 class TextReporter
     : public QObject,

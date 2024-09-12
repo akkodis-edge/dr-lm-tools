@@ -1,23 +1,23 @@
 TEMPLATE = app
 CONFIG += console
 TARGET = ioctest
-
-
+ 
+ 
 QT += core testlib
 QT -= gui
-
+ 
 include ( ../../prod.pri )
 INCLUDEPATH += ../../include
-
+ 
 INCLUDEPATH += ../common
 LIBS += -L../common -lcommon
-
+ 
 INCLUDEPATH += ../../libs/qextserialport/src
 LIBS += -L../../libs/qextserialport/src/build -lqextserialport
-
+ 
 INCLUDEPATH += ../../libs/libVSCommon
 LIBS += -L../../libs/libVSCommon -lVSCommon
-
+ 
 # Input
 HEADERS += \
 	pollanalog.h \
@@ -34,7 +34,7 @@ HEADERS += \
 	testpulsedriver.h \
 	testrunner.h \
 	textreporter.h \
-
+ 
 SOURCES += \
 	main.cpp \
 	pollanalog.cpp \

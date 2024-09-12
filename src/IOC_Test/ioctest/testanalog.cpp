@@ -1,5 +1,5 @@
 #include "testanalog.h"
-
+#include <QThread>
 #include "testmodewrapper.h"
 
 TestAnalog::TestAnalog(IOCtrlCommController * controller,
@@ -64,6 +64,7 @@ void TestAnalog::runTest(void)
 
     m_controller->sendTestGetAdcCMD(actualChannel(m_channel));
     bool got_signal = m_semaphore.tryAcquire(1, 1000); // ms
+    QThread::msleep(500);
     if (not got_signal)
     {
         m_reporter->testHasFailed("Timed out.");
@@ -71,9 +72,11 @@ void TestAnalog::runTest(void)
         return;
     }
 
-    qDebug("Analog_in%u Value %u (%fV) Expected range (%u-%u)",
+    qDebug("Analog_in%u value: %u || %.2fV (Expected range %u-%u || %.2fV-%.2fV)",
         m_channel,  m_receivedValue, ((float)m_receivedValue * 3.3 / 4096),
-        m_expectedLow, m_expectedHigh);
+        m_expectedLow, m_expectedHigh,
+        (((float)m_expectedLow * 3.3) / 4096),
+        (((float)m_expectedHigh * 3.3) / 4096));
 
 
     m_reporter->logResult(QString("%1,").arg(m_receivedValue));
