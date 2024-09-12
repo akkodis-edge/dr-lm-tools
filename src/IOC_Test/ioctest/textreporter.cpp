@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QHashIterator>
 #include <QDateTime>
+#include <limits>
 
 TextReporter::TextReporter(QCoreApplication *app,
                            bool colorized,
