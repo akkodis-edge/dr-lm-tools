@@ -79,9 +79,9 @@ void TestGPO::runTest()
     // Lambda to toggle ECG state
     auto setECGState = [](bool state) {
         if (state) {
-            system("echo 1 > /sys/devices/platform/pwm-manikin@0/period"); // ECG on
+            system("echo 1 > /sys/devices/platform/pwm-manikin/period"); // ECG on, measuring with a scope the pwm output 4.4V
         } else {
-            system("echo 0 > /sys/devices/platform/pwm-manikin@0/period"); // ECG off
+            system("echo 0 > /sys/devices/platform/pwm-manikin/period"); // ECG off, measuring with a scope the pwm output 0V
         }
     };
 
