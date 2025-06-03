@@ -58,11 +58,9 @@ int main(int argc, char *argv[])
 #endif
 #endif
     QCoreApplication a(argc, argv);
+    QString commPort = "/dev/ttymxc3";  // Default port
     a.setOrganizationName("DataRepons");
     a.setApplicationName("VitalSim2 BaseUnit Production Test");
-
-    // Serial port to IOC
-    IOCtrlCommController ioControl("/dev/ttymxc3");
 
     // parse cmd line arguments
     QStringList args = a.arguments();
@@ -83,6 +81,7 @@ int main(int argc, char *argv[])
 \n  --can-cpr            Run the CAN-CPR test.                          						\
 \n  --cuff               Run the Cuff test.                            							\
 \n  -c, --color          Add colors to output.                          						\
+\n  --com-port=DEV       Set serial port (default /dev/ttymxc3)                                                         \
 \n  -h, --help           Print this message and exit.\n";
     bool option_forceExit = false;
     bool option_help = args.size() == 1; // default yes if no args
@@ -123,6 +122,8 @@ int main(int argc, char *argv[])
             option_colors = true;
         } else if (arg == "-f" || arg == "--file") {
             option_file_out = true;
+        } else if (arg.startsWith("--com-port=")) {
+            commPort = arg.mid(11);
         }
         // else if (arg == "--test") {
         //     ioControl.sendTestModeCMD(0x01);              //Enter test mode
@@ -238,6 +239,9 @@ int main(int argc, char *argv[])
         option_firmware = false;
         quitApplication(&a);
     }
+
+    // Serial port to IOC
+    IOCtrlCommController ioControl(commPort);
 
     // actions
     if (option_firmware) {
