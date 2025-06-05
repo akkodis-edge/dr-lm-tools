@@ -2,6 +2,7 @@
 #include "testmodewrapper.h"
 #include <QTest>
 #include <QDebug>
+#include <QProcess>  // Required for running shell commands
 
 TestCanCpr::TestCanCpr(QObject *parent)
     : QObject(parent)
@@ -10,7 +11,22 @@ TestCanCpr::TestCanCpr(QObject *parent)
     , m_writeUSBData("")
     , m_semaphore(0)
 {
-   m_canSerialPort = new QextSerialPort("/dev/ttymxc2", QextSerialPort::EventDriven);
+    QString canPort = "/dev/ttymxc2";   // default
+    QString usbPort = "/dev/ttyUSB0";   // default
+
+    QProcess proc;
+    proc.start("sh", QStringList() << "-c" << "nvram | grep _PRODUCT_ID");
+    if (proc.waitForFinished()) {
+        QString output = proc.readAllStandardOutput().trimmed();
+        if (!output.isEmpty() && !output.contains("20-19602")) {
+            canPort = "/dev/ttymxc1";
+            usbPort = "/dev/ttymxc3";
+        }
+    } else {
+        qWarning("Could not run 'nvram' command. Falling back to default port values.");
+    }
+
+    m_canSerialPort = new QextSerialPort(canPort, QextSerialPort::EventDriven);
     m_canSerialPort->setBaudRate(BAUD115200);
     m_canSerialPort->setFlowControl(FLOW_OFF);
     m_canSerialPort->setDataBits(DATA_8);
@@ -18,7 +34,7 @@ TestCanCpr::TestCanCpr(QObject *parent)
     m_canSerialPort->setStopBits(STOP_1);
     m_canSerialPort->open(QextSerialPort::ReadWrite);
 
-    m_cprUSBPort = new QextSerialPort ("/dev/ttyUSB0", QextSerialPort::EventDriven);
+    m_cprUSBPort = new QextSerialPort(usbPort, QextSerialPort::EventDriven);
     m_cprUSBPort->setBaudRate(BAUD115200);
     m_cprUSBPort->setFlowControl(FLOW_OFF);
     m_cprUSBPort->setDataBits(DATA_8);
