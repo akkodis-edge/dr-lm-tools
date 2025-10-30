@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     const char * usage = "\
 \nUsage: ioctest [options]                                              						\
 \nOptions:                                                              						\
-\n  -r, --run            Run all tests.                                 						\
+\n  -r, --run            Run all tests except cuff. Cuff needs to be run with --cuff			\ 
 \n  --fw                 Show current IO Controller firmware version.   						\
 \n  -f --file            Save results in a file                         						\
 \n  --poll-gpio=<ch>     Poll given GPIO channel.                       						\
@@ -376,9 +376,6 @@ int main(int argc, char *argv[])
         // CAN-CPR test
         tests->addTest(new TestCanCpr());
 
-        // Cuff sphygmamometer
-        tests->addTest(new TestCuff(&ioControl, 40)); // above 40mmHg
-        
         // Run all tests. Controlled by own QThead, to ensure that the
         // Qt message pump is running.
         tests->start();
