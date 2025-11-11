@@ -1,5 +1,5 @@
 #include "testcuff.h"
-
+#include <QThread>
 // #include "testmodewrapper.h"
 
 TestCuff::TestCuff(IOCtrlCommController * controller,
@@ -36,17 +36,42 @@ void TestCuff::receivedMessage(quint32 value)
 
 void TestCuff::runTest()
 {
-    // TestModeWrapper testmode(m_controller);
+    // Parameters for retry
+    const int maxRetries = 3;     // Maximum number of retry attempts
+    const int retryDelay= 3;       // Retry delay of 3 seconds
 
-    connect(m_controller, SIGNAL(cuffMessage(quint32)),
-            this, SLOT(receivedMessage(quint32)),
-            Qt::AutoConnection);
-    // m_reporter->testHasFailed("NOT IMPLEMENTED!");
-
-    if (not m_semaphore.tryAcquire(1, 5000))
+    // Try connecting to IOC and running the test
+    for (int attempt = 0; attempt < maxRetries; ++attempt)
     {
-        m_reporter->testHasFailed(
-            QString("No reponse from IOC or max value (%1) below threshold (%2)")
-            .arg(m_maxReceived).arg(m_threshold));
+        qDebug() << "Attempting to connect to IOC, attempt" << (attempt + 1);
+
+        // Connect the cuff signal to the receivedMessage() slot
+        connect(m_controller, SIGNAL(cuffMessage(quint32)),
+                this, SLOT(receivedMessage(quint32)),
+                Qt::AutoConnection);
+
+        // Wait for message with a timeout
+        if (m_semaphore.tryAcquire(1, 5000))  // Wait for 5 seconds
+        {
+            // Successfully received a message, no need to retry
+            return;
+        }
+        else
+        {
+            // No response or max value below threshold, retry
+            qDebug() << "No response from IOC or max value (" << m_maxReceived << ") below threshold (" << m_threshold << ")";
+            if (attempt < maxRetries - 1) // Only wait if we are going to retry again
+            {
+		qDebug() << "Make sure to set the cuff meter to a value over 40mmHg with the pump inflator";
+                QThread::sleep(1);
+		qDebug() << "Retrying connection to IOC in" << retryDelay << "second(s)...";
+                QThread::sleep(retryDelay);  // Delay before retrying
+            }
+        }
     }
+
+    // If all retries fail, report failure
+    m_reporter->testHasFailed(
+        QString("Failed to connect to IOC after %1 attempts. Max value (%2) below threshold (%3)")
+        .arg(maxRetries).arg(m_maxReceived).arg(m_threshold));
 }
